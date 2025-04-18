@@ -1,0 +1,22 @@
+services:
+  frontend:
+    build:
+      context: ./frontend  # Répertoire où se trouve le Dockerfile du frontend
+    ports:
+      - "3000:3000"  # Expose le port 3000 du conteneur sur le port 3000 de la machine hôte
+    networks:
+      - fullstack-network
+
+  backend:
+    build:
+      context: ./backend  # Répertoire où se trouve le Dockerfile du backend
+    ports:
+      - "8080:8080"  # Expose le port 8080 du conteneur sur le port 8080 de la machine hôte
+    networks:
+      - fullstack-network
+    depends_on:
+      - frontend  # Le backend dépend du frontend (si nécessaire, mais généralement pour la communication API)
+
+networks:
+  fullstack-network:
+    driver: bridge
