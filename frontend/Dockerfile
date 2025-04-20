@@ -1,9 +1,9 @@
 # Étape 1 : Build avec Vite
 FROM node:18 AS build
 WORKDIR /app
-COPY frontend/package*.json ./
+COPY package*.json ./
 RUN npm install
-COPY frontend ./
+COPY . .
 RUN npm run build
 
 # Étape 2 : Serve via Nginx
