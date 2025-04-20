@@ -1,23 +1,13 @@
-# Utilisation de l'image officielle Node.js
-FROM node:14
-
-# Répertoire de travail dans le conteneur
+# Étape 1 : Build avec Vite
+FROM node:18 AS build
 WORKDIR /app
-
-# Copier les fichiers package.json et package-lock.json pour installer les dépendances
-COPY package*.json ./
-
-# Installer les dépendances
+COPY ./frontend/package*.json ./
 RUN npm install
-
-# Copier le reste des fichiers de l'application frontend
-COPY . .
-
-# Construire l'application (si vous utilisez vite, par exemple)
+COPY ./frontend .
 RUN npm run build
 
-# Exposer le port de l'application frontend
-EXPOSE 3000
-
-# Démarrer l'application frontend (en utilisant vite)
-CMD ["npm", "run", "dev"]
+# Étape 2 : Serve via Nginx
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
