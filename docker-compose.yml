@@ -3,8 +3,8 @@ version: '3.8'
 services:
   frontend:
     build:
-      context: .
-      dockerfile: frontend/Dockerfile
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "80:80"
     depends_on:
@@ -12,12 +12,14 @@ services:
 
   backend:
     build:
-      context: .
-      dockerfile: backend/Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
       - "8787:8787"
     environment:
       - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/movies
+    depends_on:
+      - mongodb
 
   mongodb:
     image: mongo
